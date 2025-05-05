@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Produto</title>
+</head>
+<body>
+    <h1>Editar Produto: {{ produto.nome }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar alterações</button>
+    </form>
+
+    <a href="{%url 'listar_produtos'%}" class="btn_nav">Consulta de Itens 🔍</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consulta de Itens</title>
+  <link rel="stylesheet" href="{% static 'css/consulta.css' %}" />
+</head>
+<body>
+  <div class="pai">
+    <div class="pdv_container">
+      <div class="nav">
+        <img src="{% static 'images/logo-removebg.png' %}" alt="Logo" />
+        <div class="botoes_nav">
+          <a href="{% url 'vendas' %}" class="btn_nav">Vendas 🛒</a>
+          <a href="{% url 'cadastrar_item' %}" class="btn_nav">Cadastro de Itens 📦</a>
+          <button class="btn_nav">Entrada de Estoque ⬆️</button>
+          <button class="btn_nav">Fechamento de Caixa 💰</button>
+          <button class="btn_nav">Sair 👩‍💻</button>
+        </div>
+      </div>
+
+      <div class="consulta_container">
+        <div class="barra_pesquisa">
+          <form method="get" action="{% url 'listar_produtos' %}">
+            <label for="busca">Digite o código:</label>
+            <input type="text" id="busca" name="busca" value="{{ query }}" placeholder="Ex: Parafuso 10mm ou 00123" />
+            <button class="btn_buscar" type="submit">Buscar 🔍</button>
+          </form>
+        </div>
+
+        <div class="resultados">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Estoque</th>
+                <th>Preço Unitário</th>
+                <th>Ações</th>  <!-- Coluna para o botão -->
+              </tr>
+            </thead>
+            <tbody>
+              {% if produtos %}
+                {% for produto in produtos %}
+                  <tr>
+                    <td>{{ produto.est }}</td>
+                    <td>{{ produto.nome }}</td>
+                    <td>{{ produto.estoque }}</td>
+                    <td>R$ {{ produto.preco_unitario }}</td>
+                    <!-- Botão de edição -->
+                    <td>
+                      <a href="{% url 'editar_produto' produto.est %}">
+                        <button class="btn_editar">Editar</button>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5">Nenhum produto encontrado.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>PDV - Vendas</title>
+    <link rel="stylesheet" href="{% static 'css/vendas.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <img src="{% static 'images/logo-removebg.png' %}" alt="Logo" class="logo">
+            <div class="nav-buttons">
+                <a href="{% url 'listar_produtos' %}" class="btn">Consulta de Itens 🔍</a>
+                <a href="{% url 'cadastrar_item' %}" class="btn">Cadastro de Itens 📦</a>
+            </div>
+        </div>
+
+        <!-- Mensagem de erro -->
+        {% if mensagem %}
+            <div class="mensagem-erro">{{ mensagem }}</div>
+        {% endif %}
+
+        <!-- Conteúdo -->
+        <div class="content">
+            <!-- Cupom Fiscal -->
+            <div class="card cupom">
+                <h2 class="title">Cupom Fiscal</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descrição</th>
+                            <th>Qtd.</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cupom %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.descricao }}</td>
+                                <td>{{ item.quantidade }}</td>
+                                <td>R$ {{ item.valor }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">Nenhum item no cupom.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Formulário de Venda -->
+            <div class="card form">
+                <form method="get" class="form-group">
+                    <label for="codigo">Código do Produto:</label>
+                    <input type="text" id="codigo" name="codigo" placeholder="Ex: 00123">
+                    
+                    <label for="quantidade">Quantidade:</label>
+                    <input type="number" id="quantidade" name="quantidade" min="1" value="1">
+
+                    <button type="submit" class="btn full">Adicionar Produto ➕</button>
+                </form>
+
+                <!-- Valor Total -->
+                <div class="total">
+                    <span>Valor Total:</span>
+                    <strong>R$ {{ total }}</strong>
+                </div>
+
+                <!-- Ações -->
+                <form method="post" class="form-group row">
+                    {% csrf_token %}
+                    <button type="submit" name="finalizar" class="btn">Finalizar Venda 💾</button>
+                    <button type="submit" name="limpar" class="btn">Limpar Cupom 🧹</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
